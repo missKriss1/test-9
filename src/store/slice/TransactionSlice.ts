@@ -1,20 +1,22 @@
 import {ITransaction} from "../../types.ts";
 import {createSlice} from "@reduxjs/toolkit";
 import {fetchAddNewTransaction} from "../thunk/thunkTransaction.ts";
+import {RootState} from "../../app/store.ts";
 
 interface TransactionState {
-    transacrions : ITransaction[];
+    transactions : ITransaction[];
     total: number;
     loading: boolean;
     error: boolean;
 }
 
 const initialState: TransactionState = {
-    transacrions: [],
+    transactions: [],
     total: 0,
     loading: false,
     error: false,
 };
+export const transactionSelector = (state: RootState) => state.transactions.transactions;
 
 const transactionSlice = createSlice({
     name: "transactions",

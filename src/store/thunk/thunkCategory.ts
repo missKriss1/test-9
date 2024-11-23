@@ -25,3 +25,10 @@ export const fetchGetCategoryType = createAsyncThunk<CategoryApi, string>('categ
     const {data:response} = await axiosApi(`/categories${type}.json`);
     return response;
 })
+
+export const deleteCategoryById = createAsyncThunk<void, string>(
+    'category/delete',
+    async (categoryId: string) => {
+        await axiosApi.delete(`/categories/${categoryId}.json`);
+    },
+);

@@ -1,7 +1,7 @@
 import {ICategory} from "../../types.ts";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
-import {fetchCategoriesAll} from "../thunk/thunkCategory.ts";
+import {deleteCategoryById, fetchCategoriesAll} from "../thunk/thunkCategory.ts";
 
 interface CategoryState {
     categories: ICategory[];
@@ -35,6 +35,18 @@ const categorySlice = createSlice({
                 state.loading = false;
                 state.error = true;
             })
+            .addCase(
+                deleteCategoryById.pending,
+                (state: CategoryState) => {
+                    state.loading = false;
+                },
+            )
+            .addCase(deleteCategoryById.fulfilled, (state: CategoryState) => {
+                state.loading = false;
+            })
+            .addCase(deleteCategoryById.rejected, (state: CategoryState) => {
+                state.loading = false;
+            });
     }
 });
 

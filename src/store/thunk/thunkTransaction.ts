@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ITransicrionApi, ITransicrionsApi} from "../../types.ts";
+import {ITransicrionApi, ITransicrionsApi,} from "../../types.ts";
 import axiosApi from "../../axiosApi.ts";
 
 export const fetchAllGetTransactions = createAsyncThunk<ITransicrionsApi, void>('transactions/fetchAllGetTransactions', async () =>{
@@ -8,6 +8,8 @@ export const fetchAllGetTransactions = createAsyncThunk<ITransicrionsApi, void>(
 }
 );
 
-export const fetchAddNewTransaction = createAsyncThunk<void, ITransicrionApi>('transactions/fetchAddNewTransaction', async (trans: ITransicrionApi) => {
-    await axiosApi.post('transactions.json', trans);
+export const fetchAddNewTransaction = createAsyncThunk('transactions/fetchAddNewTransaction', async (trans: ITransicrionApi) => {
+   const response =  await axiosApi.post('transactions.json', trans);
+   const newTrans = {...trans, id: response.data}
+    return newTrans
 });

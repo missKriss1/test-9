@@ -1,36 +1,37 @@
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import { carigoriesSelector } from "../../store/slice/CategorySlice.ts";
 import "../UI/Modal.css";
-import React, {useEffect, useState} from "react";
-import { ITransaction, ITransicrionApi } from "../../types.ts";
-import {fetchAddNewTransaction} from "../../store/thunk/thunkTransaction.ts";
+import React, { useEffect, useState } from "react";
+import { ITransicrionApi } from "../../types.ts";
+import { fetchGetCategoryType } from "../../store/thunk/thunkCategory.ts";
 
 interface Props {
-    currentTrans: ITransicrionApi | null;
+    currentTrans?: ITransicrionApi;
     closeModal: () => void;
+    onSubmit: (transaction: ITransicrionApi) => void;
 }
 
-const initialemptyState: ITransaction = {
+const initialemptyState: ITransicrionApi = {
     transactionSum: 0,
-    type: "income",
-    category: "",
-    date: new Date().toString(),
+    type: 'income',
+    category: '',
+    date: new Date().toISOString(),
 };
 
-const FormTransaction: React.FC<Props> = ({ currentTrans, closeModal }) => {
+const FormTransaction: React.FC<Props> = ({ currentTrans, closeModal, onSubmit }) => {
     const categories = useAppSelector(carigoriesSelector);
     const dispatch = useAppDispatch();
-
-    const types = [
-        { name: "income", id: "income" },
-        { name: "expense", id: "expense" },
-    ];
 
     const initilaState: ITransicrionApi = currentTrans
         ? { ...currentTrans }
         : initialemptyState;
 
     const [transaction, setTransaction] = useState<ITransicrionApi>(initilaState);
+
+    const types = [
+        { name: "income", id: "income" },
+        { name: "expense", id: "expense" },
+    ];
 
     const changeInputAndSelect = (
         e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -43,24 +44,13 @@ const FormTransaction: React.FC<Props> = ({ currentTrans, closeModal }) => {
 
     const onSubmitForm = (e: React.FormEvent) => {
         e.preventDefault();
-        dispatch((fetchAddNewTransaction(transaction)));
-        console.log(transaction);
+        onSubmit(transaction);
         closeModal();
     };
 
-    useEffect(() =>{
-        if(transaction.type === 'income' && !transaction.category){
-            setTransaction((prev) =>({
-                ...prev,
-                category: 'income'
-            }));
-        }else{
-            setTransaction((prev) =>({
-                ...prev,
-                category: 'expense'
-            }));
-        }
-    }, [transaction.type]);
+    useEffect(() => {
+        dispatch(fetchGetCategoryType(transaction.type));
+    }, [transaction.type, dispatch]);
 
     return (
         <div className="modal-body">
@@ -89,9 +79,9 @@ const FormTransaction: React.FC<Props> = ({ currentTrans, closeModal }) => {
                     value={transaction.category}
                 >
                     <option value="">Select Category</option>
-                    {types.map((type) => (
-                        <option key={type.id} value={type.name}>
-                            {type.name}
+                    {categories.map((category) => (
+                        <option key={category.id} value={category.name}>
+                            {category.name}
                         </option>
                     ))}
                 </select>
@@ -104,7 +94,7 @@ const FormTransaction: React.FC<Props> = ({ currentTrans, closeModal }) => {
                     min="1"
                     className="form-control"
                     onChange={changeInputAndSelect}
-                    value={transaction.trasictionSum}
+                    value={transaction.transactionSum}
                 />
 
                 <div className="mt-3">
@@ -121,7 +111,6 @@ const FormTransaction: React.FC<Props> = ({ currentTrans, closeModal }) => {
                 </div>
             </form>
         </div>
-
     );
 };
 

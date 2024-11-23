@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 import FormTransaction from "../Form/FormTransaction.tsx";
 
-const TollBar = () => {
+interface Props {
+    onSubmit:() =>void
+}
+
+const TollBar: React.FC <Props> = ({onSubmit}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -24,12 +28,14 @@ const TollBar = () => {
                     </div>
                     <div>
                         <button className="btn">
-                            <Link to="/" className="navbar-brand text-black fw-bold">
+                            <Link to="/categories" className="navbar-brand text-black fw-bold">
                                 Categories
                             </Link>
                         </button>
                         <button className="btn" onClick={openModal}>
-                            <span className="navbar-brand text-black fw-bold">Add</span>
+                            <Link className="navbar-brand text-black fw-bold"
+                                  to='/transactions/add-transaction'
+                            >Add</Link>
                         </button>
                     </div>
                 </div>
@@ -53,7 +59,7 @@ const TollBar = () => {
                             onClick={closeModal}
                         ></button>
 
-                        <FormTransaction closeModal={closeModal} />
+                        <FormTransaction closeModal={closeModal} onSubmit={onSubmit} />
                     </div>
                 </div>
             </div>

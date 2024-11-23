@@ -6,11 +6,11 @@ export interface ICategory {
 
 export type CategoryApi = Omit<ICategory, 'id'>;
 
-export interface ICatigoriesApi{
+export interface ICatigoriesApi {
   [id: string]: CategoryApi;
 }
 
-export interface ITransaction{
+export interface ITransaction {
   id: string;
   name: string;
   transactionSum: number;
@@ -19,13 +19,13 @@ export interface ITransaction{
   date: string;
 }
 
-export interface ITransicrionApi{
-  trasictionSum: number;
+export interface ITransicrionApi {
+  transactionSum: number;
   type: string;
   category: string;
-  data: ITransaction[];
+  date: string;
 }
 
 export interface ITransicrionsApi {
-  [id: string]: ITransicrionApi
+  [id: string]: ITransaction;
 }
