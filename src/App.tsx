@@ -1,8 +1,14 @@
+import TollBar from "./Components/TollBar/TollBar.tsx";
 
 const App = () => {
     return (
-        <div>
-            dfg
+        <div className="container">
+            <header>
+                <TollBar/>
+            </header>
+            <main>
+
+            </main>
         </div>
     );
 };
